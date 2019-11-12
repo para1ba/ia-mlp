@@ -1,5 +1,5 @@
 import numpy as np
-from utils import parse_dataset
+from utils
 
 dataset_path = '../res/train.csv'
 model_path = '../res/model.txt'
@@ -12,6 +12,7 @@ def main():
         print("\t1. Treinar Modelo")
         print("\t2. Salvar Modelo")
         print("\t3. Carregar Modelo")
+        print("\t4. Testar Modelo")
         print("\t0. Sair")
         opt = input()
         break_lines()
@@ -20,6 +21,8 @@ def main():
         elif opt == '2':
             pass
         elif opt == '3':
+            pass
+        elif opt == '4':
             pass
         elif opt == '0':
             break
