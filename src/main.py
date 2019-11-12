@@ -6,6 +6,8 @@ test_dataset_path = '../res/test.csv'
 model_path = '../res/model.txt'
 
 def main():
+    global model_path, train_dataset_path, test_dataset_path
+    
     model = {}
     train_dataset = utils.parse_dataset(train_dataset_path)
     test_dataset = utils.parse_dataset(test_dataset_path)
@@ -25,7 +27,7 @@ def main():
             if not model:
                 print("> Você precisa ter um modelo treinado para isso!")
             else:
-                save(model)
+                save(model, model_path)
         elif opt == '3':
             model = load(model_path)
         elif opt == '4':
@@ -45,8 +47,8 @@ def train(dataset):
 def test(model, dataset):
     pass
 
-def save(model):
-    pass
+def save(model, model_path):
+    utils.write_NN(model, model_path)
 
 def load(model_path):
     return utils.parse_NN(model_path)
