@@ -15,10 +15,25 @@ def parse_dataset(file):
 
     return dataset
 
+def run_layer(layer, x_values):
+    y = np.add(np.matmul(layer['W'], x_values[0].transpose()), layer['b'].transpose())
+    return apply_signal(y, layer['signal'])
+
+def apply_signal(arr, signal_function="sigmoid"):
+    for i in range(len(arr)):
+        arr[i] = apply_function(arr[i], signal_function)
+    return arr
+
+def apply_function(value, function):
+    if function == 'sigmoid':
+        return sigmoid(value)
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
 
 def get_row(dataset, index=-1):
     resp = dataset['data'][random.randrange(len(dataset['data']))] if index == -1 else dataset['data'][index]
-    return (resp[:dataset['args']['dims']], resp[dataset['args']['dims']:])
+    return (resp[:dataset['args']['classes']], resp[dataset['args']['classes']:])
 
 def parse_NN(file):
     layers = []
@@ -68,3 +83,17 @@ def parse_NN(file):
                 values[i] = float(values[i])
             layer['b'] = np.array(values)
     return layers
+
+def write_NN(model, filepath):
+    with open(filepath, 'w+') as file:
+        for layer in model:
+            file.write("camada_" + str(layer['number']) + "\n")
+            file.write("entrada " + str(layer['input']) + "\n")
+            file.write("saida  " + str(layer['output']) + "\n")
+            file.write("W" + "\n")
+            for lines in layer['W']:
+                file.write(" ".join(str(x) for x in lines) + '\n')
+            file.write("b" + "\n")
+            file.write(" ".join(str(x) for x in layer['b']) + '\n')
+            file.write("ativacao " + str(layer['signal']) + "\n")
+            file.write("--\n")

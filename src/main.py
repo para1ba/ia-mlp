@@ -1,11 +1,14 @@
 import numpy as np
-from utils
+import utils
 
-dataset_path = '../res/train.csv'
+train_dataset_path = '../res/train.csv'
+test_dataset_path = '../res/test.csv'
 model_path = '../res/model.txt'
 
 def main():
-    dataset = utils.parse_dataset(dataset_path)
+    model = {}
+    train_dataset = utils.parse_dataset(train_dataset_path)
+    test_dataset = utils.parse_dataset(test_dataset_path)
 
     while True:
         print("======= MENU =======")
@@ -17,17 +20,36 @@ def main():
         opt = input()
         break_lines()
         if opt == '1':
-            pass
+            model = train(train_dataset)
         elif opt == '2':
-            pass
+            if not model:
+                print("> Você precisa ter um modelo treinado para isso!")
+            else:
+                save(model)
         elif opt == '3':
-            pass
+            model = load(model_path)
         elif opt == '4':
-            pass
+            if not model:
+                print("> Você precisa ter um modelo treinado para isso!")
+            else:
+                test(model, test_dataset)
         elif opt == '0':
             break
         else:
             print("- OPÇÃO INVÁLIDA -")
+
+def train(dataset):
+    model = None
+    return model
+
+def test(model, dataset):
+    pass
+
+def save(model):
+    pass
+
+def load(model_path):
+    return utils.parse_NN(model_path)
 
 def break_lines():
     for _ in range(20):
