@@ -1,5 +1,6 @@
-import numpy as np
 import utils
+import random
+import numpy as np
 
 train_dataset_path = '../res/train.csv'
 test_dataset_path = '../res/test.csv'
@@ -42,6 +43,18 @@ def main():
 
 def train(dataset):
     model = None
+    data_test, label_test, data_train, label_train = [], [], [], []
+    test_size = 0.1
+
+    for i in range(len(dataset['data'])):
+        data, label = utils.get_row(dataset, i)
+        if random.random() < test_size:
+            data_test.append(data)
+            label_test.append(label)
+        else:
+            data_train.append(data)
+            label_train.append(label) 
+
     return model
 
 def test(model, dataset):
