@@ -1,3 +1,4 @@
+import sys
 import utils
 import random
 import numpy as np
@@ -5,6 +6,9 @@ import numpy as np
 train_dataset_path = '../res/train.csv'
 test_dataset_path = '../res/test.csv'
 model_path = '../res/model.txt'
+
+# n_layers = sys.argv[1]
+n_layers = 5
 
 def main():
     global model_path, train_dataset_path, test_dataset_path

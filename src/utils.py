@@ -1,5 +1,7 @@
 import numpy as np
 
+neurons = 20
+
 def parse_dataset(file):
     data = np.genfromtxt(file, delimiter=',', skip_header=2)
     problem_args = list(np.genfromtxt(file, skip_footer=len(data), dtype=str))
@@ -35,12 +37,31 @@ def get_row(dataset, index=-1):
     resp = dataset['data'][random.randrange(len(dataset['data']))] if index == -1 else dataset['data'][index]
     return (resp[:dataset['args']['classes']], resp[dataset['args']['classes']:])
 
+def initialize_model(n_layers = 5):
+    global neurons
+
+    for i in range(n_layers):
+        input_length = neurons if i > 0 else 784
+        output_length = neurons if i < n_layers-1 else 10
+
+        b = np.random.uniform(low = -1, high = 1, size=(output_length, ))
+        W = np.random.uniform(low = -1, high = 1, size=(output_length, input_length))
+
+        layer = {
+            'number': i,
+            'input': input_length
+            'output': output_length
+            'signal': 'sigmoid',
+            'b': b,
+            'W': W
+        }
+
 def parse_NN(file):
     layers = []
     layer = {
         'number': '',
-        'input': [],
-        'output': [],
+        'input': 0,
+        'output': 0,
         'signal': '',
         'b': [],
         'W': []
