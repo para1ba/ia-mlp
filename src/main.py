@@ -2,6 +2,7 @@ import sys
 import utils
 import random
 import numpy as np
+from pdb import set_trace as pause
 
 train_dataset_path = '../res/train.csv'
 test_dataset_path = '../res/test.csv'
@@ -46,20 +47,39 @@ def main():
             print("- OPÇÃO INVÁLIDA -")
 
 def train(dataset):
-    model = None
+    global n_layers
+
+    model = utils.initialize_model(n_layers)
     data_test, label_test, data_train, label_train = [], [], [], []
     test_size = 0.1
+    epochs = 1
 
     for i in range(len(dataset['data'])):
-        data, label = utils.get_row(dataset, i)
+        ## sample = (data, labels)
+        sample = utils.get_row(dataset, i)
         if random.random() < test_size:
-            data_test.append(data)
-            label_test.append(label)
+            data_test.append(sample[0])
+            label_test.append(sample[1])
         else:
-            data_train.append(data)
-            label_train.append(label) 
-    print("TAMANHO DO DATASET DE TREINO: ", len(data_train))
-    print("TAMANHO DO DATASET DE TESTE: ", len(data_test))
+            data_train.append(sample[0])
+            label_train.append(sample[1]) 
+    #print("TAMANHO DO DATASET DE TREINO: ", len(data_train))
+    #print("TAMANHO DO DATASET DE TESTE: ", len(data_test))
+    for epoch in range(epochs):
+        for k in range(len(data_train)):
+            sample, label = data_train[k], label_train[k]
+            x_values, outputs = sample, []
+            for layer in model:
+                x_values = utils.run_layer(layer, x_values)
+                outputs.append(x_values)
+            predicted = x_values
+            for i, layer in enumerate(reversed(model)):
+                ## index_of_layer == len(model) - (1 + i)
+                #pause()
+                if layer == model[len(model) - 1]:
+                    gradient = np.matmul(np.subtract(np.dot(2, predicted), np.dot(2, label)), predicted * (1 - np.array(predicted)))
+                else:
+                    gradient = np.matmul(np.dot(np.transpose(model[len(model) - i]['W']), gradient), outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i])))
 
     return model
 

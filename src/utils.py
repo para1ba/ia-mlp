@@ -18,7 +18,7 @@ def parse_dataset(file):
     return dataset
 
 def run_layer(layer, x_values):
-    y = np.add(np.matmul(layer['W'], x_values[0].transpose()), layer['b'].transpose())
+    y = np.add(np.matmul(layer['W'], x_values.transpose()), layer['b'].transpose())
     return apply_signal(y, layer['signal'])
 
 def apply_signal(arr, signal_function="sigmoid"):
@@ -35,7 +35,7 @@ def sigmoid(x):
 
 def get_row(dataset, index=-1):
     resp = dataset['data'][random.randrange(len(dataset['data']))] if index == -1 else dataset['data'][index]
-    return (resp[:dataset['args']['classes']], resp[dataset['args']['classes']:])
+    return (resp[:dataset['args']['dims']], resp[dataset['args']['dims']:])
 
 def initialize_model(n_layers = 5):
     global neurons
