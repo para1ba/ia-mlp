@@ -15,7 +15,7 @@ def main():
     
     model = {}
     train_dataset = utils.parse_dataset(train_dataset_path)
-    test_dataset = utils.parse_dataset(test_dataset_path)
+    #test_dataset = utils.parse_dataset(test_dataset_path)
 
     while True:
         print("======= MENU =======")
@@ -58,6 +58,8 @@ def train(dataset):
         else:
             data_train.append(data)
             label_train.append(label) 
+    print("TAMANHO DO DATASET DE TREINO: ", len(data_train))
+    print("TAMANHO DO DATASET DE TESTE: ", len(data_test))
 
     return model
 

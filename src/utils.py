@@ -39,7 +39,8 @@ def get_row(dataset, index=-1):
 
 def initialize_model(n_layers = 5):
     global neurons
-
+    
+    model = []
     for i in range(n_layers):
         input_length = neurons if i > 0 else 784
         output_length = neurons if i < n_layers-1 else 10
@@ -48,13 +49,15 @@ def initialize_model(n_layers = 5):
         W = np.random.uniform(low = -1, high = 1, size=(output_length, input_length))
 
         layer = {
-            'number': i,
-            'input': input_length
-            'output': output_length
+            'number': i+1,
+            'input': input_length,
+            'output': output_length,
             'signal': 'sigmoid',
             'b': b,
             'W': W
         }
+        model.append(layer)
+    return model
 
 def parse_NN(file):
     layers = []
