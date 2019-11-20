@@ -64,8 +64,6 @@ def train(dataset):
         else:
             data_train.append(sample[0])
             label_train.append(sample[1]) 
-    #print("TAMANHO DO DATASET DE TREINO: ", len(data_train))
-    #print("TAMANHO DO DATASET DE TESTE: ", len(data_test))
     for epoch in range(epochs):
         for k in range(len(data_train)):
             sample, label = data_train[k], label_train[k]
@@ -75,18 +73,30 @@ def train(dataset):
                 outputs.append(x_values)
             predicted = x_values
             for i, layer in enumerate(reversed(model)):
-                ## index_of_layer == len(model) - (1 + i)
-                #pause()
+
                 if layer == model[len(model) - 1]:
                     gradient = np.matmul(np.subtract(np.dot(2, predicted), np.dot(2, label)), predicted * (1 - np.array(predicted)))
                 else:
                     gradient = np.matmul(np.dot(np.transpose(model[len(model) - i]['W']), gradient), outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i])))
                 layer = utils.update_layer(layer, gradient, learning_rate, outputs[len(model) - (i + 1)] if len(model) - (i + 1) > 0 else sample)
+    test(model, data_test, label_test)
 
     return model
 
-def test(model, dataset):
-    pass
+def test(model, data_test, label_test):
+    hit, miss = 0, 0
+    for i, sample in enumerate(data_test):
+        output = sample
+        for layer in model:
+            output = utils.run_layer(layer, output)
+        if (np.array(output) == np.array(label_test[i])).all():
+            hit += 1
+        else:
+            miss += 1
+    print("ACERTOS: ", hit)
+    print("ERROS: ", miss)
+
+
 
 def save(model, model_path):
     utils.write_NN(model, model_path)

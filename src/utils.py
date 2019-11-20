@@ -23,6 +23,7 @@ def run_layer(layer, x_values):
     return apply_signal(y, layer['signal'])
 
 def update_layer(layer, gradient, learning_rate, h_before):
+    pause()
     layer['W'] = np.subtract(layer['W'], np.dot(learning_rate, (np.array(gradient)*np.transpose(np.array(h_before)))))
     layer['b'] = np.subtract(layer['b'], np.dot(learning_rate, gradient))
 
