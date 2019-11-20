@@ -1,4 +1,5 @@
 import numpy as np
+from pdb import set_trace as pause
 
 neurons = 20
 
@@ -20,6 +21,12 @@ def parse_dataset(file):
 def run_layer(layer, x_values):
     y = np.add(np.matmul(layer['W'], x_values.transpose()), layer['b'].transpose())
     return apply_signal(y, layer['signal'])
+
+def update_layer(layer, gradient, learning_rate, h_before):
+    layer['W'] = np.subtract(layer['W'], np.dot(learning_rate, (np.array(gradient)*np.transpose(np.array(h_before)))))
+    layer['b'] = np.subtract(layer['b'], np.dot(learning_rate, gradient))
+
+    return layer
 
 def apply_signal(arr, signal_function="sigmoid"):
     for i in range(len(arr)):

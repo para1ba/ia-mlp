@@ -10,6 +10,7 @@ model_path = '../res/model.txt'
 
 # n_layers = sys.argv[1]
 n_layers = 5
+learning_rate = 0.1
 
 def main():
     global model_path, train_dataset_path, test_dataset_path
@@ -47,7 +48,7 @@ def main():
             print("- OPÇÃO INVÁLIDA -")
 
 def train(dataset):
-    global n_layers
+    global n_layers, learning_rate
 
     model = utils.initialize_model(n_layers)
     data_test, label_test, data_train, label_train = [], [], [], []
@@ -80,6 +81,7 @@ def train(dataset):
                     gradient = np.matmul(np.subtract(np.dot(2, predicted), np.dot(2, label)), predicted * (1 - np.array(predicted)))
                 else:
                     gradient = np.matmul(np.dot(np.transpose(model[len(model) - i]['W']), gradient), outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i])))
+                layer = utils.update_layer(layer, gradient, learning_rate, outputs[len(model) - (i + 1)] if len(model) - (i + 1) > 0 else sample)
 
     return model
 
