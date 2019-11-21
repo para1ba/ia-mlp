@@ -114,8 +114,8 @@ def test(model, data_test, label_test):
     for i, sample in enumerate(data_test):
         output = sample
         for layer in model:
-            output = utils.run_layer(layer, output)
-        if (np.array(output) == np.array(label_test[i])).all():
+            output = utils.run_layer(layer, output)        
+        if np.argmax(output) == np.argmax(label_test[i]):
             hit += 1
         else:
             miss += 1
