@@ -53,7 +53,7 @@ def train(dataset):
     model = utils.initialize_model(n_layers)
     data_test, label_test, data_train, label_train = [], [], [], []
     test_size = 0.1
-    epochs = 1
+    epochs = 3
 
     for i in range(len(dataset['data'])):
         sample = utils.get_row(dataset, i)
@@ -95,6 +95,7 @@ def test(model, data_test, label_test):
             miss += 1
     print("ACERTOS: ", hit)
     print("ERROS: ", miss)
+    print("TAXA DE ACERTOS: ", hit/(hit+miss) * 100)
 
 def test_main(model, dataset):
     data_test, label_test = [], []
