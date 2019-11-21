@@ -63,22 +63,48 @@ def train(dataset):
             label_test.append(sample[1])
         else:
             data_train.append(sample[0])
-            label_train.append(sample[1]) 
+            label_train.append(sample[1])
+
+    # print("DATASET LENGTH: ", len(data_train))
+
     for epoch in range(epochs):
         for k in range(len(data_train)):
+            # print(k)
             sample, label = data_train[k], label_train[k]
             x_values, outputs = sample, []
+
+            outputs.append(x_values)
             for layer in model:
                 x_values = utils.run_layer(layer, x_values)
                 outputs.append(x_values)
-            predicted = x_values
-            for i, layer in enumerate(reversed(model)):
+                # print(x_values)
 
-                if layer == model[len(model) - 1]:
-                    gradient = np.matmul(np.subtract(np.dot(2, predicted), np.dot(2, label)), predicted * (1 - np.array(predicted)))
+            predicted = x_values
+            for i in range(len(model)-1, -1, -1):
+                # print(i)
+
+                layer = model[i]
+
+                if i == len(model)-1:
+                    gradient = np.subtract(np.dot(2, predicted), np.dot(2, label)) * predicted * (1 - np.array(predicted))
                 else:
-                    gradient = np.matmul(np.dot(np.transpose(model[len(model) - i]['W']), gradient), outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i])))
-                layer = utils.update_layer(layer, gradient, learning_rate, outputs[len(model) - (i + 1)] if len(model) - (i + 1) > 0 else sample)
+                    gradient = np.matmul(np.transpose(model[i+1]['W']), gradient) * outputs[i+1] * (1 - np.array(outputs[i+1]))
+
+                layer = utils.update_layer(layer, gradient, learning_rate, outputs[i] if i > 0 else sample)
+
+
+            # for i, layer in enumerate(reversed(model)):
+            #     print(i)
+
+            #     if layer == model[len(model) - 1]:
+            #         gradient = np.subtract(np.dot(2, predicted), np.dot(2, label)) * predicted * (1 - np.array(predicted))
+            #         # gradient = np.matmul(np.subtract(np.dot(2, predicted), np.dot(2, label)), predicted * (1 - np.array(predicted)))
+            #     else:
+            #         pause()
+            #         gradient = np.matmul(np.transpose(model[len(model) - i]['W']), gradient) * outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i]))
+            #         # gradient = np.matmul(np.dot(np.transpose(model[len(model) - i]['W']), gradient), outputs[len(model) - i] * (1 - np.array(outputs[len(model) - i])))
+            #     # pause()
+            #     layer = utils.update_layer(layer, gradient, learning_rate, outputs[len(model) - (i + 1)] if len(model) - (i + 1) > 0 else sample)
     test(model, data_test, label_test)
 
     return model
